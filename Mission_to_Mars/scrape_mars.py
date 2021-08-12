@@ -2,6 +2,7 @@ from splinter import Browser
 from bs4 import BeautifulSoup as bs
 import time
 from webdriver_manager.chrome import ChromeDriverManager
+import pandas as pd
 
 def scrape_info():
     # Set up Splinter
@@ -30,6 +31,17 @@ def scrape_info():
     browser.visit(url)
     featured_image_url='https://spaceimages-mars.com/image/featured/mars2.jpg'
 
+    # pandas scrape of Mars Facts
+    url='https://galaxyfacts-mars.com/'
+
+    tables_df=pd.read_html(url)
+    tables_df
+
+    tables_df=tables_df[0]
+    tables_df.head()
+
+    mars_table=tables_df.to_html()
+
     # Mars hemispheres images
     hemisphere_image_urls = [
     {"title": "Valles Marineris Hemisphere", "img_url": "https://marshemispheres.com/images/b3c7c6c9138f57b4756be9b9c43e3a48_valles_marineris_enhanced.tif_full.jpg"},
@@ -44,7 +56,8 @@ def scrape_info():
         "featured_img": featured_image_url,
         "article head": article_title,
         "article body": news_p,
-        "hemisphere_images": hemisphere_image_urls,   
+        "hemisphere_images": hemisphere_image_urls,
+        "mars_table": mars_table  
     }
 
     # Close the browser after scraping
@@ -52,5 +65,3 @@ def scrape_info():
 
     # Return results
     return mars_data
-
-print(scrape_info())
